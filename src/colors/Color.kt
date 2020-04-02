@@ -1,0 +1,4 @@
+package colors
+
+interface Color {
+}
