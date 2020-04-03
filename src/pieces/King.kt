@@ -5,9 +5,6 @@ import board.Board
 import colors.Color
 
 class King(name: String, initialPosition: Position, color: Color, board: Board): Piece(name, initialPosition, color, board) {
-    override fun isPossiblePosition(position: Position): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     override fun getAllPossiblePositions(): List<Position> {
         return board.allPossiblesPositions(
@@ -16,11 +13,10 @@ class King(name: String, initialPosition: Position, color: Color, board: Board):
                 currentPosition.moveTo(-1, 1),  //back step
                 currentPosition.moveTo(-1, 0), //left step
                 currentPosition.moveTo(1, 0) , //right step
-                currentPosition.moveTo(1, 0) , //right step
                 currentPosition.moveTo(1, 1) , //diagonal up right step
                 currentPosition.moveTo(-1, 0) , //diagonal up left step
-                currentPosition.moveTo(1, -1) , //diagonal dow right step
-                currentPosition.moveTo(-1, -1)), //right step
+                currentPosition.moveTo(1, -1) , //diagonal down right step
+                currentPosition.moveTo(-1, -1)), //diagonal down left step
             color.getOpponentColor() )
     }
 }
