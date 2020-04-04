@@ -10,10 +10,10 @@ class Pawn(name: String, initialPosition: Position, color: Color, board: Board):
         TODO("le simple déplacement est faux, il faut vérifier qu'un pion n'est pas présent")
             return board.allPossiblesPositions(
                 mutableListOf<Position>(
-                    currentPosition.moveTo(0, color.way * 1),
-                    currentPosition.moveTo(0,color.way * 2),
-                    currentPosition.moveTo(-1,color.way * 1),
-                    currentPosition.moveTo(1,color.way * 1) ),
+                    currentPosition.relativePosition(0, color.way * 1),
+                    currentPosition.relativePosition(0,color.way * 2),
+                    currentPosition.relativePosition(-1,color.way * 1),
+                    currentPosition.relativePosition(1,color.way * 1) ),
                 color.getOpponentColor() )
 
     }
