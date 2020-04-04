@@ -29,7 +29,12 @@ class Board(var pieces: List<Piece>) {
 
     fun getPiece(position: Position) : Piece? = pieces.find{ it.currentPosition == position }
     fun getAllPositions() : List<Position> = pieces.map { it.currentPosition }
-    fun allPossiblesPositions(positions: List<Position>, opponentColor: Color): List<Position> = pieces.filter{ it.currentPosition in positions && it.color == opponentColor }.map { it.currentPosition }
+    fun allPossiblesPositions(positions: List<Position>, color: Color): List<Position> {
+        var allPossiblesPositions = mutableListOf<Position>()
+        allPossiblesPositions.addAll( pieces.filter{ it.currentPosition in positions.filter { it.takeable } && it.color == color.opponentColor() }.map { it.currentPosition } )
+        allPossiblesPositions.addAll(positions.filter{ it !in pieces.map { it.currentPosition } })
+        return allPossiblesPositions
+    }
     fun getPieces(positions: List<Position>, color: Color) : List<Piece>? = pieces.filter{ it.currentPosition in positions && it.color == color }
 
 
