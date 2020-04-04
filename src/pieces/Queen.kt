@@ -5,11 +5,10 @@ import board.Board
 import board.Vector
 import colors.Color
 
-class Queen(name: String, initialPosition: Position, color: Color, board: Board): Piece(name, initialPosition, color, board) {
+class Queen(initialPosition: Position, color: Color): Piece("Queen", initialPosition, color) {
 
     override fun getAllPossiblePositions(): List<Position> {
-        val possiblesPositions = mutableListOf<Position>()
-        possiblesPositions.apply {
+        return mutableListOf<Position>().apply{
             addAll(currentPosition.allPositionsToDirection(Vector(1, 0)))
             addAll(currentPosition.allPositionsToDirection(Vector(0, -1)))
             addAll(currentPosition.allPositionsToDirection(Vector(-1, 0)))
@@ -19,6 +18,5 @@ class Queen(name: String, initialPosition: Position, color: Color, board: Board)
             addAll(currentPosition.allPositionsToDirection(Vector(-1, -1)))
             addAll(currentPosition.allPositionsToDirection(Vector(-1, 1)))
         }
-        return board.allPossiblesPositions( possiblesPositions, color.getOpponentColor() )
     }
 }

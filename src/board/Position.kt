@@ -2,6 +2,11 @@ package board
 
 data class Position(var abscissa: Int, var ordinate: Int) {
 
+    override fun toString(): String {
+        val abscissa = ('a'..'h').toList()
+        return abscissa[this.abscissa - 1] + ordinate.toString()
+    }
+
     fun outOfBounds(): Boolean = abscissa !in 1..8 || ordinate !in 1..8
 
     fun relativePosition(abscissa: Int, ordinate: Int) : Position {
