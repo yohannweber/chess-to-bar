@@ -2,15 +2,16 @@ package pieces
 
 import board.Move
 import board.Position
-import board.Board
-import colors.Black
 import colors.Color
+import java.lang.IllegalArgumentException
 
 open abstract class Piece(
     val name: String,
     val initialPosition: Position,
-    val color: Color
-) : Move {
+    val color: Color,
+    val possibleMoves : MutableList<Move>,
+    var count : Int = 0
+) {
     var currentPosition : Position = initialPosition
     override fun toString() : String {
         return when (initialPosition.abscissa){
@@ -24,5 +25,10 @@ open abstract class Piece(
                 ""
 
         } + " in $currentPosition"
+    }
+
+   open fun moveTo(position: Position){
+        currentPosition = position
+        count += 1
     }
 }

@@ -1,20 +1,22 @@
 package pieces
 
+import board.Move
 import board.Position
+import board.Vector
 import colors.Color
 
-class Knight(initialPosition: Position, color: Color): Piece("Knight", initialPosition, color) {
+class Knight(initialPosition: Position, color: Color)
+    : Piece("Knight", initialPosition, color,
+    mutableListOf<Move>(
+        Move(Vector(1,2,1)),
+        Move(Vector(2,1,1)),
+        Move(Vector(2,-1,1)),
+        Move(Vector(1,-2,1)),
+        Move(Vector(-1,-2,1)),
+        Move(Vector(-2,-1,1)),
+        Move(Vector(-2,1,1)),
+        Move(Vector(-1,2,1))
+    )
+) {
 
-    override fun getAllPossiblePositions(): List<Position> {
-        return mutableListOf<Position>(
-                currentPosition.relativePosition(1,  2),  //1 hour
-                currentPosition.relativePosition(2, 1),  //2 hour
-                currentPosition.relativePosition(2, -1), //4 hour
-                currentPosition.relativePosition(1, -2) , //5 hour
-                currentPosition.relativePosition(-1, -2) , //7 hour
-                currentPosition.relativePosition(-2, -1) , //8 hour
-                currentPosition.relativePosition(-2, 1) , //10 hour
-                currentPosition.relativePosition(-1, 2) ) //11 hour
-
-    }
 }

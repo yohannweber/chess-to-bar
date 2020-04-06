@@ -1,19 +1,26 @@
 package pieces
 
+import board.Move
 import board.Position
-import board.Board
+import board.PositionType
+import board.Vector
 import colors.Color
 
-class Pawn(initialPosition: Position, color: Color): Piece("Pawn", initialPosition, color) {
+class Pawn(initialPosition: Position, color: Color)
+    : Piece("Pawn", initialPosition, color,
+    mutableListOf<Move>(
+        Move(Vector(0,color.way * 2, 1), PositionType.MOVE_ONLY ),
+        Move(Vector(0, color.way * 1, 1), PositionType.MOVE_ONLY ),
+        Move(Vector(-1,color.way * 1,1), PositionType.CAPTURE_ONLY),
+        Move(Vector(1,color.way * 1,1), PositionType.CAPTURE_ONLY))
+)
+{
     override fun toString(): String = "$color $name in $currentPosition"
 
-    override fun getAllPossiblePositions(): List<Position>? {
-        TODO("le simple déplacement est faux, il faut vérifier qu'un pion n'est pas présent")
-            return mutableListOf<Position>(
-                    currentPosition.relativePosition(0, color.way * 1, false), // only move, not takeable
-                    currentPosition.relativePosition(0,color.way * 2, false), // only move, not takeable
-                    currentPosition.relativePosition(-1,color.way * 1),
-                    currentPosition.relativePosition(1,color.way * 1) )
-
+    override fun moveTo(position: Position){
+        super.moveTo(position)
+        if (count == 1)
+            possibleMoves.removeAt(0)
     }
+
 }

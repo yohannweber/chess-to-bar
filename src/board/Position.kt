@@ -1,6 +1,6 @@
 package board
 
-data class Position(var abscissa: Int, var ordinate: Int, val takeable : Boolean = true) {
+data class Position(var abscissa: Int, var ordinate: Int) {
     constructor(readablePosition : String) : this( ('a'..'h').indexOf(readablePosition[0]), readablePosition[1].toInt())
 
     override fun toString(): String {
@@ -10,23 +10,37 @@ data class Position(var abscissa: Int, var ordinate: Int, val takeable : Boolean
 
     fun outOfBounds(): Boolean = abscissa !in 1..8 || ordinate !in 1..8
 
-    fun relativePosition(abscissa: Int, ordinate: Int, takeable: Boolean = true ) : Position {
-        //require( absIncrement + abscissa in 1..8 && ordIncrement + ordinate in 1..8 ) { "out of bounds"}
-        return Position(this.abscissa + abscissa, this.ordinate + ordinate, takeable)
+    private fun relativePosition(abscissa: Int, ordinate: Int ) : Position {
+        return Position(this.abscissa + abscissa, this.ordinate + ordinate)
     }
     fun nextPosition(direction: Vector) : Position{
         return relativePosition(direction.abscissa, direction.ordinate)
     }
 
-    fun allPositionsToDirection(direction : Vector) : List<Position>{
+    operator fun plus(direction: Vector): Position = Position( abscissa + direction.abscissa, ordinate + direction.ordinate)
+    operator fun plus(move: Move): Position = this + move.direction
+    override fun equals(others: Any?) : Boolean =
+    when(others)
+    {
+        is Position -> abscissa == others.abscissa && ordinate == others.ordinate
+        else -> false
+    }
+
+
+    fun nextPositions(moves : List<Move>) : List<Position>{
         val positions = mutableListOf<Position>()
-        var position = Position(abscissa + direction.abscissa, ordinate + direction.ordinate)
-        while (!position.outOfBounds()){
-            positions.add(position)
-            position = position.nextPosition(direction)
+        for (possibleMove in moves) {
+            var position = Position(abscissa + possibleMove.direction.abscissa, ordinate + possibleMove.direction.ordinate)
+            var length = 0
+            while (!position.outOfBounds() && (possibleMove.direction.length == 0 || (possibleMove.direction.length != 0 && length < possibleMove.direction.length))) {
+                positions.add(position)
+                position = position.nextPosition(possibleMove.direction)
+                length += 1
+            }
         }
         return positions
     }
 
 }
+
 

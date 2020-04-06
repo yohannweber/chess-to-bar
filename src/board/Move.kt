@@ -1,8 +1,10 @@
 package board
 
-interface Move {
-    fun isPossiblePosition(position: Position): Boolean {
-        return getAllPossiblePositions()?.any{ it == position } ?: false
-    }
-    fun getAllPossiblePositions() : List<Position>?
+data class Move(val direction : Vector, val positionType: PositionType = PositionType.MOVE_N_CAPTURE) {
+}
+
+enum class PositionType{
+    MOVE_ONLY,
+    CAPTURE_ONLY,
+    MOVE_N_CAPTURE
 }
