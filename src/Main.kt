@@ -12,31 +12,31 @@ fun main(){
 
         // Creates an instance which takes input from standard input (keyboard)
         val reader = Scanner(System.`in`)
-        var piece = chessBoard.getPiece(getPosition())
-        println(piece)
 
         print("What do you want to do ? \n" +
-                "1. Get possible moves \n" +
-                "2. Move the piece \n" +
-                "3. nothing \n")
-        if(piece != null)
-            when(reader.next().toUpperCase()){
-                "1" -> if(piece != null) println(chessBoard.allNextPossiblePositions(piece))
+                "1. Play a piece \n" +
+                "2. Display board \n" +
+                "3. Show previous moves \n")
+        when(reader.next().toUpperCase()){
+            "1" -> {
+                var piece = chessBoard.getPiece(getPosition())
+                if(piece != null) println(piece.toString() + "\nall possibles moves are " + chessBoard.allNextPossiblePositions(piece))
                 else
                     println("no piece found")
-                "2" -> {
-                    try {
-                        chessBoard.moveTo(piece, getPosition())
-                    }
-                    catch ( e : IllegalArgumentException){
-                        println("Position not possible")
+
+                if(piece != null){
+                    print(  "1. Move the piece \n" +
+                            "Others Skip \n")
+                    when(reader.next().toUpperCase()) {
+                        "1" -> chessBoard.moveTo(piece, getPosition())
+                        else -> "Skip command"
                     }
                 }
-                "3" -> "todo"
-                else -> "Unknown command"
             }
-        else
-            println("Piece does not exist")
+            "2" -> chessBoard.display()
+            "3" -> println(chessBoard.history)
+            else -> "Unknown command"
+        }
 
         print("Continue ? O/N")
         exit = when(reader.next().toUpperCase()){

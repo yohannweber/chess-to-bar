@@ -1,9 +1,14 @@
 package board
 
 import pieces.*
+import java.lang.IllegalArgumentException
 
-class Board(var pieces: List<Piece>) {
-    val history : MutableList<Position> = mutableListOf()
+class Board(private var pieces: MutableList<Piece>) {
+    val history = mutableListOf<Pair<Position, Position>>()
+
+    init {
+        sort()
+    }
 
     override fun toString(): String {
         return if(pieces.count() == 0)
@@ -22,31 +27,30 @@ class Board(var pieces: List<Piece>) {
         println(this)
     }
 
-    fun moveTo(piece: Piece,position: Position){
-        require(position in allNextPossiblePositions(piece)){ "Position not possible"}
+    fun moveTo(piece: Piece, position: Position){
+        //require(position in allNextPossiblePositions(piece)){ "Position not possible"}
+        val allPossiblePosition = allNextPossiblePositions(piece)
+        if (position !in allPossiblePosition) throw  IllegalArgumentException("Position is not possible")
+        pieces.removeIf { it.currentPosition == position }
+        history.add(Pair(piece.currentPosition, position))
         piece.moveTo(position)
-        history.add(position)
+        sort()
 
+    }
+
+    private fun sort(){
+        pieces.sortBy { it.currentPosition }
     }
 
     fun thereIsPiece(position : Position) : Boolean = pieces.any{ it.currentPosition == position }
     fun getPiece(position: Position) : Piece? = pieces.find{ it.currentPosition == position }
     fun allCurrentPositions() : List<Position> = pieces.map { it.currentPosition }
     fun allNextPossiblePositions(piece: Piece): List<Position> {
-        /*val piecePositions = piece.nextPossiblePositions()
-        var allPossiblesPositions = mutableListOf<Position>()
-        allPossiblesPositions.addAll( pieces.filter{ it.currentPosition in piecePositions && it.color == piece.color.opponentColor() && (it.currentPosition.positionType in listOf<PositionType>( PositionType.CAPTURE_ONLY, PositionType.MOVE_N_CAPTURE) ) }.map { it.currentPosition } )
-        allPossiblesPositions.addAll(piecePositions.filter{ it !in pieces.map { it.currentPosition } && it.positionType in listOf<PositionType>( PositionType.MOVE_ONLY, PositionType.MOVE_N_CAPTURE) })
-        return allPossiblesPositions*/
-
         val positions = mutableListOf<Position>()
         for (possibleMove in piece.possibleMoves) {
-            //var position = Position(piece.currentPosition + possibleMove.direction.abscissa, piece.currentPosition.ordinate + possibleMove.direction.ordinate)
             var position = piece.currentPosition + possibleMove
             var length = 0
             while (!position.outOfBounds() && (possibleMove.direction.length == 0 || (possibleMove.direction.length != 0 && length < possibleMove.direction.length))) {
-                //position = pieces.find { it.currentPosition == position
-                //&& it.color == piece.color.opponentColor() }.currentPosition
                 if ( pieces.any{ it.currentPosition == position && it.color != piece.color }){
                     if(possibleMove.positionType in listOf<PositionType>( PositionType.CAPTURE_ONLY, PositionType.MOVE_N_CAPTURE))
                         positions.add(position)
@@ -56,9 +60,10 @@ class Board(var pieces: List<Piece>) {
                     if ( pieces.any{ it.currentPosition == position && it.color == piece.color })
                         break
                     else{
-                        if (position !in pieces.map { it.currentPosition } && possibleMove.positionType in listOf<PositionType>( PositionType.MOVE_ONLY, PositionType.MOVE_N_CAPTURE) ){
+                        //if (position !in pieces.map { it.currentPosition } && possibleMove.positionType in listOf<PositionType>( PositionType.MOVE_ONLY, PositionType.MOVE_N_CAPTURE) ){
+                        if (possibleMove.positionType in listOf<PositionType>( PositionType.MOVE_ONLY, PositionType.MOVE_N_CAPTURE) ){
                             positions.add(position)
-                            position = position + possibleMove
+                            position += possibleMove
                         }
                         length += 1
                     }
@@ -103,7 +108,6 @@ class Board(var pieces: List<Piece>) {
             ).apply {
                 addAll(blackPawn)
                 addAll(whitePawn)
-                sortBy { it.currentPosition }
             } )
         }
     }
