@@ -12,14 +12,6 @@ fun main(){
 
         // Creates an instance which takes input from standard input (keyboard)
         val reader = Scanner(System.`in`)
-        /*print("Enter a abscissa: ")
-        // nextInt() reads the next integer from the keyboard
-        var abscissa: Int = reader.nextInt()
-        print("Enter a  ordinate ")
-        // nextInt() reads the next integer from the keyboard
-        var ordinate: Int = reader.nextInt()
-
-        val position = Position(abscissa, ordinate)*/
         var piece = chessBoard.getPiece(getPosition())
         println(piece)
 
@@ -60,10 +52,8 @@ fun getPosition() : Position{
     // Creates an instance which takes input from standard input (keyboard)
     val reader = Scanner(System.`in`)
     print("Enter a abscissa: ")
-    // nextInt() reads the next integer from the keyboard
     var abscissa: Int = reader.nextInt()
     print("Enter a  ordinate ")
-    // nextInt() reads the next integer from the keyboard
     var ordinate: Int = reader.nextInt()
 
     return Position(abscissa, ordinate)

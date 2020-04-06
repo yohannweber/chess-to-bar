@@ -1,8 +1,5 @@
 package board
 
-import colors.Black
-import colors.Color
-import colors.White
 import pieces.*
 
 class Board(var pieces: List<Piece>) {
@@ -50,7 +47,7 @@ class Board(var pieces: List<Piece>) {
             while (!position.outOfBounds() && (possibleMove.direction.length == 0 || (possibleMove.direction.length != 0 && length < possibleMove.direction.length))) {
                 //position = pieces.find { it.currentPosition == position
                 //&& it.color == piece.color.opponentColor() }.currentPosition
-                if ( pieces.any{ it.currentPosition == position && it.color == piece.color.opponentColor() }){
+                if ( pieces.any{ it.currentPosition == position && it.color != piece.color }){
                     if(possibleMove.positionType in listOf<PositionType>( PositionType.CAPTURE_ONLY, PositionType.MOVE_N_CAPTURE))
                         positions.add(position)
                     break
@@ -75,8 +72,8 @@ class Board(var pieces: List<Piece>) {
 
     companion object Factory{
         fun setup() : Board{
-            val white = White()
-            val black = Black()
+            val white = Color.WHITE
+            val black = Color.BLACK
             var blackPawn = listOf<Piece>()
             var whitePawn = listOf<Piece>()
             for( i in 1..8 ) {
@@ -106,6 +103,7 @@ class Board(var pieces: List<Piece>) {
             ).apply {
                 addAll(blackPawn)
                 addAll(whitePawn)
+                sortBy { it.currentPosition }
             } )
         }
     }

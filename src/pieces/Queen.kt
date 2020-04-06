@@ -3,7 +3,7 @@ package pieces
 import board.Move
 import board.Position
 import board.Vector
-import colors.Color
+import board.Color
 
 class Queen(initialPosition: Position, color: Color)
     : Piece("Queen", initialPosition, color,

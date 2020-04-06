@@ -2,8 +2,7 @@ package pieces
 
 import board.Move
 import board.Position
-import colors.Color
-import java.lang.IllegalArgumentException
+import board.Color
 
 open abstract class Piece(
     val name: String,

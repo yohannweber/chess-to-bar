@@ -4,7 +4,7 @@ import board.Move
 import board.Position
 import board.PositionType
 import board.Vector
-import colors.Color
+import board.Color
 
 class Pawn(initialPosition: Position, color: Color)
     : Piece("Pawn", initialPosition, color,
