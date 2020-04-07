@@ -52,7 +52,7 @@ class Board(private var pieces: MutableList<Piece>) {
             var length = 0
             while (!position.outOfBounds() && (possibleMove.direction.length == 0 || (possibleMove.direction.length != 0 && length < possibleMove.direction.length))) {
                 if ( pieces.any{ it.currentPosition == position && it.color != piece.color }){
-                    if(possibleMove.positionType in listOf<PositionType>( PositionType.CAPTURE_ONLY, PositionType.MOVE_N_CAPTURE))
+                    if(possibleMove.moveType in listOf<MoveType>( MoveType.CAPTURE_ONLY, MoveType.MOVE_N_CAPTURE))
                         positions.add(position)
                     break
                 }
@@ -60,8 +60,7 @@ class Board(private var pieces: MutableList<Piece>) {
                     if ( pieces.any{ it.currentPosition == position && it.color == piece.color })
                         break
                     else{
-                        //if (position !in pieces.map { it.currentPosition } && possibleMove.positionType in listOf<PositionType>( PositionType.MOVE_ONLY, PositionType.MOVE_N_CAPTURE) ){
-                        if (possibleMove.positionType in listOf<PositionType>( PositionType.MOVE_ONLY, PositionType.MOVE_N_CAPTURE) ){
+                        if (possibleMove.moveType in listOf<MoveType>( MoveType.MOVE_ONLY, MoveType.MOVE_N_CAPTURE) ){
                             positions.add(position)
                             position += possibleMove
                         }
@@ -72,6 +71,7 @@ class Board(private var pieces: MutableList<Piece>) {
         }
         return positions
     }
+
     fun getPieces(positions: List<Position>, color: Color) : List<Piece>? = pieces.filter{ it.currentPosition in positions && it.color == color }
 
 
