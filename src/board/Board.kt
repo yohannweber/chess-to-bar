@@ -23,10 +23,6 @@ class Board(private var pieces: MutableList<Piece>) {
         }
     }
 
-    fun display(){
-        println(this)
-    }
-
     fun moveTo(piece: Piece, position: Position){
         //require(position in allNextPossiblePositions(piece)){ "Position not possible"}
         val allPossiblePosition = allNextPossiblePositions(piece)
@@ -50,29 +46,41 @@ class Board(private var pieces: MutableList<Piece>) {
         for (possibleMove in piece.possibleMoves) {
             var position = piece.currentPosition + possibleMove
             var length = 0
-            while (!position.outOfBounds() && (possibleMove.direction.length == 0 || (possibleMove.direction.length != 0 && length < possibleMove.direction.length))) {
-                if ( pieces.any{ it.currentPosition == position && it.color != piece.color }){
-                    if(possibleMove.moveType in listOf<MoveType>( MoveType.CAPTURE_ONLY, MoveType.MOVE_N_CAPTURE))
-                        positions.add(position)
-                    break
-                }
-                else{
-                    if ( pieces.any{ it.currentPosition == position && it.color == piece.color })
-                        break
-                    else{
-                        if (possibleMove.moveType in listOf<MoveType>( MoveType.MOVE_ONLY, MoveType.MOVE_N_CAPTURE) ){
+
+            position@ while (!position.outOfBounds() && (possibleMove.direction.length == 0 || (possibleMove.direction.length != 0 && length < possibleMove.direction.length))) {
+                when( getPiece(position)?.color ?: "" ) {
+                    // in this position an opponent piece exists
+                    piece.color.opponentColor() ->{
+                        if(possibleMove.moveType in listOf<MoveType>( MoveType.CAPTURE_ONLY, MoveType.MOVE_N_CAPTURE))
                             positions.add(position)
-                            position += possibleMove
-                        }
+                        break@position
+                    }
+
+                    // in this position one of our piece exists
+                    piece.color -> break@position
+
+                    // no piece in this position
+                    else -> {
+                        if (possibleMove.moveType in listOf<MoveType>( MoveType.MOVE_ONLY, MoveType.MOVE_N_CAPTURE) ){
+                        positions.add(position)
+                        position += possibleMove
+                    }
                         length += 1
+
                     }
                 }
             }
         }
+        // we add specialMoves
+        positions.addAll(specialMoves(piece))
         return positions
     }
-
     fun getPieces(positions: List<Position>, color: Color) : List<Piece>? = pieces.filter{ it.currentPosition in positions && it.color == color }
+    private fun hasPiece(position: Position, color: Color) : Boolean = pieces.any{  it.currentPosition == position && it.color == color }
+    fun specialMoves(piece: Piece) : List<Position>{
+        //TODO("to be implemented")
+        return listOf()
+    }
 
 
     companion object Factory{

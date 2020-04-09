@@ -4,7 +4,7 @@ import java.util.*
 
 fun main(){
     val chessBoard = Board.setup()
-    chessBoard.display()
+    println(chessBoard)
 
     var exit = false
 
@@ -19,21 +19,9 @@ fun main(){
                 "3. Show previous moves \n")
         when(reader.next().toUpperCase()){
             "1" -> {
-                var piece = chessBoard.getPiece(getPosition())
-                if(piece != null) println(piece.toString() + "\nall possibles moves are " + chessBoard.allNextPossiblePositions(piece))
-                else
-                    println("no piece found")
-
-                if(piece != null){
-                    print(  "1. Move the piece \n" +
-                            "Others Skip \n")
-                    when(reader.next().toUpperCase()) {
-                        "1" -> chessBoard.moveTo(piece, getPosition())
-                        else -> "Skip command"
-                    }
-                }
+               playMove(chessBoard)
             }
-            "2" -> chessBoard.display()
+            "2" -> println(chessBoard)
             "3" -> println(chessBoard.history)
             else -> "Unknown command"
         }
@@ -58,4 +46,21 @@ fun getPosition() : Position{
 
     return Position(abscissa, ordinate)
 
+}
+
+fun playMove(chessBoard : Board){
+    val reader = Scanner(System.`in`)
+    var piece = chessBoard.getPiece(getPosition())
+    if(piece != null) println(piece.toString() + "\nall possibles moves are " + chessBoard.allNextPossiblePositions(piece))
+    else
+        println("no piece found")
+
+    if(piece != null){
+        print(  "1. Move the piece \n" +
+                "Others Skip \n")
+        when(reader.next().toUpperCase()) {
+            "1" -> chessBoard.moveTo(piece, getPosition())
+            else -> "Skip command"
+        }
+    }
 }
