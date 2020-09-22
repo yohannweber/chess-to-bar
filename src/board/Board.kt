@@ -26,7 +26,7 @@ class Board(private var pieces: MutableList<Piece>) {
     fun moveTo(piece: Piece, position: Position){
         //require(position in allNextPossiblePositions(piece)){ "Position not possible"}
         val allPossiblePosition = allNextPossiblePositions(piece)
-        if (position !in allPossiblePosition) throw  IllegalArgumentException("Position is not possible")
+        if (position !in allPossiblePosition) throw  IllegalArgumentException("Position $position is not possible")
         pieces.removeIf { it.currentPosition == position }
         history.add(Pair(piece.currentPosition, position))
         piece.moveTo(position)
@@ -62,9 +62,9 @@ class Board(private var pieces: MutableList<Piece>) {
                     // no piece in this position
                     else -> {
                         if (possibleMove.moveType in listOf<MoveType>( MoveType.MOVE_ONLY, MoveType.MOVE_N_CAPTURE) ){
-                        positions.add(position)
-                        position += possibleMove
-                    }
+                            positions.add(position)
+                            position += possibleMove
+                        }
                         length += 1
 
                     }
@@ -72,12 +72,26 @@ class Board(private var pieces: MutableList<Piece>) {
             }
         }
         // we add specialMoves
-        positions.addAll(specialMoves(piece))
+        //positions.addAll(specialMoves(piece))
         return positions
     }
     fun getPieces(positions: List<Position>, color: Color) : List<Piece>? = pieces.filter{ it.currentPosition in positions && it.color == color }
     private fun hasPiece(position: Position, color: Color) : Boolean = pieces.any{  it.currentPosition == position && it.color == color }
-    fun specialMoves(piece: Piece) : List<Position>{
+    fun specialMoves(piece: Piece) : List<Position>?{
+        return when(piece){
+            is Pawn -> specialMoves(piece)
+            is King -> specialMoves(piece)
+            else -> null
+        }
+        //TODO("to be implemented")
+        return listOf()
+    }
+
+    fun specialMoves(pawn: Pawn) : List<Position>?{
+        //TODO("to be implemented")
+        return listOf()
+    }
+    fun specialMoves(king: King) : List<Position>? {
         //TODO("to be implemented")
         return listOf()
     }

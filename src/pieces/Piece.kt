@@ -9,7 +9,7 @@ open abstract class Piece(
     val initialPosition: Position,
     val color: Color,
     val possibleMoves : MutableList<Move>,
-    var count : Int = 0
+    var count : Int = 0,
 ) {
     var currentPosition : Position = initialPosition
     override fun toString() : String {
